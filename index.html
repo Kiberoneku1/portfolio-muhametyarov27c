@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мирон Лешуков | Портфолио</title>
+    <style>
+        /* Сброс и базовые стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #00ff9d;
+            --secondary: #0088ff;
+            --accent: #ff00ff;
+            --contact: #ff9900;
+            --bg-dark: #0a0a0f;
+            --bg-darker: #050508;
+            --bg-light: #f5f5ff;
+            --bg-lighter: #ffffff;
+            --text-dark: #000000;
+            --text-light: #ffffff;
+            --card-dark: #121218;
+            --card-light: #f0f0ff;
+            --border-dark: #22222a;
+            --border-light: #ddddff;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--bg-lighter);
+            --text-primary: var(--text-dark);
+            --text-secondary: #333344;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+            --contact-glow: rgba(255, 153, 0, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--bg-darker);
+            --text-primary: var(--text-light);
+            --text-secondary: #aaaacc;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+            --contact-glow: rgba(255, 153, 0, 0.5);
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.5s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px var(--primary); }
+            50% { text-shadow: 0 0 20px var(--primary), 0 0 30px var(--secondary); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes phonePulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 var(--contact-glow); 
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 20px 5px var(--contact-glow); 
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Сканлайн эффект */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            z-index: 9999;
+            opacity: 0.1;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+        }
+
+        /* Шапка */
+        header {
+            background: var(--bg-secondary);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s infinite;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: left 0.3s ease;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .header-contacts {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .phone-number-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 2px solid var(--contact);
+            border-radius: 25px;
+            color: var(--contact);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            animation: phonePulse 2s infinite;
+        }
+
+        .phone-number-header:hover {
+            background: var(--contact);
+            color: var(--bg-primary);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            color: var(--text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Основной контент */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-text {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-text p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .contact-highlight {
+            color: var(--contact);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--contact-glow);
+        }
+
+        .hero-image {
+            animation: slideInRight 1s ease-out;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--primary);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid var(--accent);
+            border-radius: 30px;
+            opacity: 0.5;
+            z-index: -1;
+            animation: float 3s ease-in-out infinite reverse;
+        }
+
+        /* Секции */
+        .section {
+            margin-bottom: 4rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        /* Контактная секция */
+        .contact-section {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--contact), var(--accent));
+        }
+
+        .contact-phone-large {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--contact);
+            margin: 1.5rem 0;
+            padding: 1rem 2rem;
+            display: inline-block;
+            background: var(--bg-primary);
+            border-radius: 15px;
+            border: 3px solid var(--contact);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: phonePulse 3s infinite;
+        }
+
+        .contact-phone-large:hover {
+            background: var(--contact);
+            color: var(--bg-primary);
+            transform: scale(1.05);
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Навыки */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
+            border-color: var(--primary);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .skill-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        /* Качества */
+        .qualities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .quality-item {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .quality-item:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.2);
+        }
+
+        .quality-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Цели */
+        .goals-list {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .goals-list li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .goals-list li::before {
+            content: '▸';
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+
+        /* Подвал */
+        footer {
+            background: var(--bg-secondary);
+            padding: 3rem 2rem;
+            border-top: 2px solid var(--border-color);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .footer-phone {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--contact);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            border: 2px solid var(--contact);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .creator {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .year {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Мобильная адаптивность */
+        @media (max-width: 1024px) {
+            .header-container {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            nav ul {
+                justify-content: center;
+            }
+            
+            .hero-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+            }
+
+            nav a {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .phone-number-header {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .contact-phone-large {
+                font-size: 1.5rem;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .qualities {
+                flex-direction: column;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Эффекты Меллстроя */
+        .glitch {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .neon-border {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary), inset 0 0 10px var(--primary);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="dark">
+    <!-- Сканлайн эффект -->
+    <div class="scanline"></div>
+
+    <!-- Шапка (Голова) -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                ЛЕШУКОВ <span>МИРОН</span>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#about">Обо мне</a></li>
+                    <li><a href="#skills">Навыки</a></li>
+                    <li><a href="#qualities">Качества</a></li>
+                    <li><a href="#goals">Цели</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-contacts">
+                <a href="tel:+79506318870" class="phone-number-header">
+                    <i class="fas fa-phone"></i> +7 (950) 631-88-70
+                </a>
+                
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое (Тело) -->
+    <main>
+        <section id="about" class="hero-section">
+            <div class="hero-text">
+                <h1 class="glitch">МИРОН ЛЕШУКОВ</h1>
+                <p class="tagline">12 лет • Каменск-Уральский • Ученик KiberOne</p>
+                <p>Привет! Я начинающий IT-специалист и цифровой разработчик. Мне нравится изучать современные технологии и создавать с их помощью что-то новое, полезное и интересное.</p>
+                <p>Моё главное качество: я <span class="highlight">ОБЩИТЕЛЬНЫЙ</span>. Мне легко находить общий язык с людьми, я люблю работать в команде, обсуждать проекты и помогать другим.</p>
+                <p>Для связи со мной: <span class="contact-highlight">+7 (950) 631-88-70</span></p>
+            </div>
+            <div class="hero-image">
+                <img src="hero.png" alt="Мирон Лешуков" id="heroImage" onerror="this.src='https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <h2 class="section-title">НАВЫКИ И ЗНАНИЯ</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Нейросети и ИИ</h3>
+                    <p>Понимаю, как работают нейронные сети, умею формулировать запросы и применять их для решения задач.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Создание игр в Roblox</h3>
+                    <p>Умею создавать и редактировать карты в Roblox Studio, знаю основы геймдизайна.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                    <h3>Веб-разработка</h3>
+                    <p>Базовые навыки создания веб-страниц (Вайб-кодинг), понимаю структуру сайтов.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-database"></i></div>
+                    <h3>Работа с данными</h3>
+                    <p>Участвовал в создании цифровой базы школьников, понимаю важность организации информации.</p>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fab fa-yandex"></i></div>
+                    <h3>Яндекс-сервисы</h3>
+                    <p>Уверенно владею Яндекс.Диск, Документы, Почта для учебы и совместной работы.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="qualities" class="section">
+            <h2 class="section-title">МОИ СИЛЬНЫЕ СТОРОНЫ</h2>
+            <div class="qualities">
+                <div class="quality-item">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Техническая грамотность</h3>
+                    <p>Быстро осваиваю новые программы и цифровые сервисы</p>
+                </div>
+                
+                <div class="quality-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Творческий подход</h3>
+                    <p>Люблю превращать идеи в реальные проекты</p>
+                </div>
+                
+                <div class="quality-item">
+                    <i class="fas fa-comments"></i>
+                    <h3>Коммуникабельность</h3>
+                    <p>Легко объясняю сложные вещи, хорошо работаю в команде</p>
+                </div>
+                
+                <div class="quality-item">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Ответственность</h3>
+                    <p>Довожу начатые проекты до качественного результата</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="goals" class="section">
+            <h2 class="section-title">ЦЕЛИ НА БЛИЖАЙШЕЕ БУДУЩЕЕ</h2>
+            <ul class="goals-list">
+                <li>Углубить знания в программировании (Lua для Roblox или Python)</li>
+                <li>Создать свою полноценную игру в Roblox и опубликовать её</li>
+                <li>Разработать полезный сайт или чат-бота с помощью изученных технологий</li>
+                <li>Применить навыки по нейросетям и базам данных в школьном проекте</li>
+            </ul>
+        </section>
+
+        <section id="contact" class="section">
+            <h2 class="section-title">КОНТАКТЫ ДЛЯ СВЯЗИ</h2>
+            
+            <div class="contact-section">
+                <h3>СВЯЖИТЕСЬ СО МНОЙ</h3>
+                <p>Я всегда открыт для новых идей, проектов и сотрудничества. Если у вас есть интересные предложения или вопросы — звоните или пишите!</p>
+                
+                <a href="tel:+79506318870" class="contact-phone-large">
+                    <i class="fas fa-phone-alt"></i> +7 (950) 631-88-70
+                </a>
+                
+                <p>Звоните в удобное для вас время с 10:00 до 20:00</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone-volume"></i>
+                        <h4>Телефон</h4>
+                        <p>Прямой звонок</p>
+                        <p><strong>+7 (950) 631-88-70</strong></p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h4>Местоположение</h4>
+                        <p>Город: Каменск-Уральский</p>
+                        <p>Учеба: KiberOne</p>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <h4>Статус</h4>
+                        <p>Ученик IT-школы</p>
+                        <p>Возраст: 12 лет</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал (Ноги) -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>КОНТАКТНАЯ ИНФОРМАЦИЯ</h3>
+                <p><i class="fas fa-user"></i> Мирон Лешуков</p>
+                <div class="footer-phone">
+                    <i class="fas fa-phone"></i> +7 (950) 631-88-70
+                </div>
+                <p><i class="fas fa-map-marker-alt"></i> Город: Каменск-Уральский</p>
+                <p><i class="fas fa-graduation-cap"></i> Место учебы: KiberOne</p>
+                <p><i class="fas fa-user-graduate"></i> Статус: Ученик IT-школы</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>НАПРАВЛЕНИЯ РАБОТЫ</h3>
+                <p>Разработка игр в Roblox</p>
+                <p>Создание веб-сайтов</p>
+                <p>Работа с нейросетями</p>
+                <p>Разработка баз данных</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>СОЗДАТЕЛЬ САЙТА</h3>
+                <p>Портфолио разработано с использованием современных веб-технологий: HTML5, CSS3, JavaScript</p>
+                <p>Дизайн в стиле "Меллстроя"</p>
+                <p>Адаптивная верстка для всех устройств</p>
+                <p>Анимации и интерактивные элементы</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; <span class="year">2025</span> Портфолио Мирона Лешукова. Все права защищены.</p>
+            <p>Сайт создан <span class="creator">Мироном Лешуковым</span> как демонстрация навыков в веб-разработке.</p>
+            <p>Контактный телефон: <span class="contact-highlight">+7 (950) 631-88-70</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const body = document.body;
+        
+        // Проверяем сохраненную тему
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Анимация переключения
+            themeToggle.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                themeToggle.style.transform = '';
+            }, 300);
+        });
+        
+        function updateThemeIcon(theme) {
+            themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        // Плавная прокрутка
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Обновляем активную ссылку
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Анимация при скролле
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Наблюдаем за элементами для анимации
+        document.querySelectorAll('.skill-card, .quality-item, .contact-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+        
+        // Замена изображения на ваше hero.png
+        const heroImage = document.getElementById('heroImage');
+        // Если hero.png не загрузится, останется изображение по умолчанию
+        // В реальном использовании положите hero.png в ту же папку, что и HTML-файл
+        
+        // Глитч эффект для заголовка
+        setInterval(() => {
+            const glitchElement = document.querySelector('.glitch');
+            glitchElement.style.animation = 'none';
+            setTimeout(() => {
+                glitchElement.style.animation = 'glitch 0.5s';
+            }, 10);
+        }, 5000);
+        
+        // Обновление года в футере
+        document.querySelector('.year').textContent = new Date().getFullYear();
+        
+        // Эффект при наведении на карточки
+        document.querySelectorAll('.skill-card, .quality-item').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+        });
+        
+        // Случайный глитч эффект
+        function randomGlitch() {
+            const elements = document.querySelectorAll('.section-title, .logo');
+            const randomElement = elements[Math.floor(Math.random() * elements.length)];
+            
+            randomElement.classList.add('glitch');
+            setTimeout(() => {
+                randomElement.classList.remove('glitch');
+            }, 500);
+            
+            setTimeout(randomGlitch, Math.random() * 5000 + 3000);
+        }
+        
+        randomGlitch();
+        
+        // Копирование номера телефона при клике
+        document.querySelectorAll('.phone-number-header, .contact-phone-large, .footer-phone').forEach(element => {
+            element.addEventListener('click', function(e) {
+                if (!this.href) {
+                    e.preventDefault();
+                    navigator.clipboard.writeText('+79506318870').then(() => {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 2000);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
